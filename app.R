@@ -61,10 +61,15 @@ support_file <- function(filename) {
   app_parent_dir <- normalizePath(file.path(app_dir, ".."), mustWork = FALSE)
   candidates <- c(
     file.path(app_dir, filename),
+    file.path(app_dir, "data", filename),
     file.path(app_parent_dir, filename),
+    file.path(app_parent_dir, "data", filename),
     file.path(getwd(), filename),
+    file.path(getwd(), "data", filename),
     file.path(getwd(), "draft_test", filename),
-    file.path(getwd(), "draft_test_publish", filename)
+    file.path(getwd(), "draft_test", "data", filename),
+    file.path(getwd(), "draft_test_publish", filename),
+    file.path(getwd(), "draft_test_publish", "data", filename)
   )
   found <- candidates[file.exists(candidates)]
   if (length(found) > 0) {
@@ -117,14 +122,13 @@ if (file.exists(.review_module_file)) {
   reviewExplorerServer <- .review_module_env$reviewExplorerServer
 }
 
-# The report template can live either beside app.R or one level above, depending
-# on whether the app is run from the source folder or a deployed bundle.
-report_resource_dir <- getwd()
-if (!file.exists(file.path(report_resource_dir, "notes_app_general.html"))) {
-  parent_dir <- normalizePath(file.path(report_resource_dir, ".."), mustWork = FALSE)
-  if (file.exists(file.path(parent_dir, "notes_app_general.html"))) {
-    report_resource_dir <- parent_dir
-  }
+# The report template may live in data/ in the source tree or beside app.R in
+# older/deployed bundles.
+report_template_file <- support_file("notes_app_general.html")
+report_resource_dir <- if (file.exists(report_template_file)) {
+  dirname(report_template_file)
+} else {
+  getwd()
 }
 addResourcePath("app_files", report_resource_dir)
 addResourcePath("app_www", file.path(app_dir, "www"))

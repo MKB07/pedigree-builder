@@ -2,7 +2,7 @@
 
 ## Application Entry Point
 
-`app.R` is the Shiny entry point. It loads helper files from `R/`, frontend resources from `www/`, and support modules from the repository root.
+`app.R` is the Shiny entry point. It loads helper files from `R/`, frontend resources from `www/`, and support modules from `data/`.
 
 ## Helper Files
 
@@ -22,6 +22,10 @@
 ## External Modules
 
 `app_gene_modul_API.R` and `app_genereviewExplorer.R` are sourced into isolated environments so their helper names do not overwrite the main app helpers.
+
+## Historical Archive
+
+`archive/r-development/` contains selected local prototypes and full-app snapshots. These files are intentionally not sourced by the active application. They document the development journey before this cleaned GitHub repository existed and can be used as reference material for future refactoring.
 
 ## Future Improvements
 
